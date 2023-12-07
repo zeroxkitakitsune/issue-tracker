@@ -1,22 +1,17 @@
 'use client';
-import dynamic from "next/dynamic";
-import "easymde/dist/easymde.min.css";
-import { Button, Callout, Text, TextArea, TextField } from '@radix-ui/themes'
-import axios from "axios";
-import { useForm, Controller } from "react-hook-form";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { zodResolver } from "@hookform/resolvers/zod"; 
-import { z } from 'zod';
 import ErrorMessage from "@/app/components/ErrorMessage";
 import Spinner from "@/app/components/Spinner";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Issue } from "@prisma/client";
+import { Button, Callout, TextField } from '@radix-ui/themes';
+import axios from "axios";
+import "easymde/dist/easymde.min.css";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import SimpleMDE from 'react-simplemde-editor';
+import { z } from 'zod';
 import { issueSchema } from "../../validationSchemas";
-
-const SimpleMDE = dynamic(
-    () => import('react-simplemde-editor'), 
-    { ssr: false}
-  );
 
 type IssueFormData = z.infer<typeof issueSchema>;
 
@@ -31,8 +26,12 @@ const IssueForm = ({ issue }: { issue?: Issue}) => {
   const onSubmit = handleSubmit(async (data) => {
     try {
       setSubmitting(true);
-      await axios.post('/api/issues', data);
+      if(issue)
+        await axios.patch(`/api/issues/${issue.id}`, data);
+      else
+        await axios.post('/api/issues', data);
       router.push('/issues') 
+      router.refresh();
     } catch (error) {
       setSubmitting(false)
       setError('An unexpected error occured')
@@ -65,7 +64,7 @@ const IssueForm = ({ issue }: { issue?: Issue}) => {
             {errors.description?.message}
           </ErrorMessage>
           <Button disabled={isSubmitting}>
-            Submit New Issue{isSubmitting && <Spinner />}
+            {issue ? 'Update Issue': 'Submit New Issue'}{' '}{isSubmitting && <Spinner />}
           </Button>
       </form>
     </div>
