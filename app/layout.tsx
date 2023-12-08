@@ -1,7 +1,7 @@
 import '@radix-ui/themes/styles.css';
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import { Theme, ThemePanel } from '@radix-ui/themes'
+import { Container, Theme, ThemePanel } from '@radix-ui/themes'
 import '@radix-ui/themes/styles.css';
 import './theme-config.css';
 import './globals.css';
@@ -29,7 +29,7 @@ export default function RootLayout({
         <Theme accentColor="mint" grayColor="olive">
           <NavBar />
           <main className='p-5'>
-            {children}
+            <Container>{children}</Container>
           </main>
         </Theme>
       </body>
