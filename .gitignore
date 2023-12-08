@@ -37,3 +37,6 @@ next-env.d.ts
 
 #docker
 /docker
+
+#env
+.env
