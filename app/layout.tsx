@@ -7,6 +7,7 @@ import './theme-config.css';
 import './globals.css';
 import NavBar from './NavBar';
 import AuthProvider from './auth/Provider';
+import { QueryClientProvider } from '@/app/QueryClientProvider';
 
 
 const inter = Inter({ 
@@ -27,14 +28,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.variable}>
-        <AuthProvider>
-          <Theme accentColor="mint" grayColor="olive">
-            <NavBar />
-            <main className='p-5'>
-              <Container>{children}</Container>
-            </main>
-          </Theme>
-        </AuthProvider>
+        <QueryClientProvider>
+          <AuthProvider>
+            <Theme accentColor="mint" grayColor="olive">
+              <NavBar />
+              <main className='p-5'>
+                <Container>{children}</Container>
+              </main>
+            </Theme>
+          </AuthProvider>
+        </QueryClientProvider>
       </body>
     </html>
   )
